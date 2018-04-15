@@ -26,27 +26,23 @@ public class MessageActor extends UntypedActor {
 
     private FeedService feedService = new FeedService();
     private NewsAgentService newsAgentService = new NewsAgentService();
-    // public FeedResponse feedResponse=new FeedResponse();
-    private NewsAgentResponse newsAgentResponse=new NewsAgentResponse();
+    private FeedResponse feedResponse = new FeedResponse();
+    private NewsAgentResponse newsAgentResponse = new NewsAgentResponse();
 
     @Override
     public void onReceive(Object message) throws Throwable {
         ObjectMapper mapper = new ObjectMapper();
         Message messageObject = new Message();
         if (message instanceof String) {
-            //Message messageObject = new Message();
-            messageObject.text=(String)message;
-            messageObject.sender=Message.Sender.USER;
+            messageObject.text = (String) message;
+            messageObject.sender = Message.Sender.USER;
             out.tell(mapper.writeValueAsString(messageObject), self());
-            //newsAgentService.getNewsAgentResponse(messageObject.text,UUID.randomUUID());
-            String query=newsAgentService.getNewsAgentResponse("Find " + message,UUID.randomUUID()).query;
-            FeedResponse feedResponse=feedService.getFeedByQuery(query);
+            String query = newsAgentService.getNewsAgentResponse("Find " + message, UUID.randomUUID()).query;
+            FeedResponse feedResponse = feedService.getFeedByQuery(query);
             messageObject.text = (feedResponse.title == null) ? "No results found" : "Showing results for: " + query;
-            messageObject.feedResponse=feedResponse;
-            messageObject.sender=Message.Sender.BOT;
+            messageObject.feedResponse = feedResponse;
+            messageObject.sender = Message.Sender.BOT;
             out.tell(mapper.writeValueAsString(messageObject), self());
         }
-
-
     }
 }
