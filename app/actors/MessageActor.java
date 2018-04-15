@@ -24,6 +24,7 @@ public class MessageActor extends UntypedActor {
         this.out = out;
     }
 
+
     private FeedService feedService = new FeedService();
     private NewsAgentService newsAgentService = new NewsAgentService();
     private FeedResponse feedResponse = new FeedResponse();
